@@ -14,7 +14,7 @@ const dead = "🌊"
 
 func main() {
 	model := model{}
-	p := tea.NewProgram(model)
+	p := tea.NewProgram(model, tea.WithAltScreen())
 	p.Run()
 }
 

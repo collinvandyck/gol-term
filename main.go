@@ -8,7 +8,9 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-const fps = 60
+const fps = 10
+const alive = "😂"
+const dead = "🌊"
 
 func main() {
 	model := model{}
@@ -55,7 +57,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 		case "q", "esc", "ctrl+c":
 			return m, tea.Quit
-		case "enter":
+		default:
 			m.seed()
 		}
 	}
@@ -116,13 +118,20 @@ func (m model) countLiveNeighbors(i, j int) int {
 			if x == i && y == j {
 				continue
 			}
-			if x < 0 || x >= len(m.board) {
-				continue
+			cx, cy := x, y
+			if cx < 0 {
+				cx = len(m.board) - 1
 			}
-			if y < 0 || y >= len(m.board[x]) {
-				continue
+			if cx >= len(m.board) {
+				cx = 0
 			}
-			if m.board[x][y] {
+			if cy < 0 {
+				cy = len(m.board[cx]) - 1
+			}
+			if cy >= len(m.board[cx]) {
+				cy = 0
+			}
+			if m.board[cx][cy] {
 				count++
 			}
 		}
@@ -139,9 +148,9 @@ func (m model) View() string {
 	for i := range m.board {
 		for j := range m.board[i] {
 			if m.board[i][j] {
-				buf.WriteString("x")
+				buf.WriteString(alive)
 			} else {
-				buf.WriteString(" ")
+				buf.WriteString(dead)
 			}
 		}
 		if i != len(m.board)-1 {

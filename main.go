@@ -8,7 +8,8 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-const fps = 10
+const tps = 60
+const fps = 20
 const alive = "😂"
 const dead = "🌊"
 
@@ -17,7 +18,7 @@ func main() {
 	p := tea.NewProgram(model,
 		tea.WithAltScreen(),
 	)
-	p.Start()
+	p.Run()
 }
 
 type board [][]bool
@@ -67,15 +68,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) seed() {
-	const minRatio = 0.25
-	const maxRatio = 0.65
-	liveRatio := rand.Float64()
-	if liveRatio < minRatio {
-		liveRatio = minRatio
-	}
-	if liveRatio > maxRatio {
-		liveRatio = maxRatio
-	}
+	liveRatio := .50 + rand.Float64()*0.25
 	for i := range m.board {
 		for j := range m.board[i] {
 			if rand.Float64() < liveRatio {

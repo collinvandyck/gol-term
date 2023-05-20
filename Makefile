@@ -1,2 +1,5 @@
-run:
-	go run .
+run: install
+	gol
+
+install:
+	go install .

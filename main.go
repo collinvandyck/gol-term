@@ -8,7 +8,6 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-const tps = 60
 const fps = 20
 const alive = "😂"
 const dead = "🌊"
@@ -24,8 +23,11 @@ func main() {
 type board [][]bool
 
 type model struct {
-	board board
-	ready bool
+	board      board
+	ready      bool
+	lastUpdate time.Time
+	ticked     bool
+	last       tea.Msg
 }
 
 type TickMsg time.Time
@@ -43,6 +45,9 @@ func doTick() tea.Cmd {
 
 // Update implements tea.Model
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	m.last = msg
+	m.lastUpdate = time.Now()
+	m.ticked = false
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		m.board = make([][]bool, msg.Height)
@@ -55,6 +60,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if m.ready {
 			m.board = m.tick()
 		}
+		m.ticked = true
 		return m, doTick()
 	case tea.KeyMsg:
 		switch msg.String() {

@@ -8,7 +8,8 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-const fps = 20
+var fps = 5
+
 const alive = "😂"
 const dead = "🌊"
 
@@ -36,7 +37,7 @@ func (m model) Init() tea.Cmd {
 }
 
 func doTick() tea.Cmd {
-	return tea.Tick(time.Second/fps, func(t time.Time) tea.Msg {
+	return tea.Tick(time.Second/time.Duration(fps), func(t time.Time) tea.Msg {
 		return TickMsg(t)
 	})
 }
@@ -62,6 +63,13 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, doTick()
 	case tea.KeyMsg:
 		switch msg.String() {
+		case "+", "=":
+			fps++
+		case "-", "_":
+			fps--
+			if fps == 0 {
+				fps = 1
+			}
 		case "q", "esc", "ctrl+c":
 			return m, tea.Quit
 		default:

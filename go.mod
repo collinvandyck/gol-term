@@ -2,7 +2,7 @@ module gol
 
 go 1.20
 
-require github.com/charmbracelet/bubbletea v0.24.0
+require github.com/charmbracelet/bubbletea v0.24.2
 
 require (
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
@@ -21,5 +21,3 @@ require (
 	golang.org/x/term v0.6.0 // indirect
 	golang.org/x/text v0.3.8 // indirect
 )
-
-replace github.com/charmbracelet/bubbletea => github.com/collinvandyck/bubbletea v0.0.0-20230520161354-69a15fc20d81
